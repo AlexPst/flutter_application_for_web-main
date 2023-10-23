@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_for_web/components/mobile_desktop_view_builder.dart';
-import 'package:flutter_application_for_web/navigation_bar/navigation_bar_view.dart';
+import 'package:flutter_application_for_web/main.dart';
+import 'package:provider/provider.dart';
 
 class DrawerView extends StatelessWidget{
   const DrawerView({super.key});
@@ -22,6 +23,8 @@ class DrawerDesktopView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final navigationItems = context.watch<List<NavigationItem>>();
+    final scrollController = context.watch<ScrollController>();
     return Drawer(
       child: ListView(
     // Important: Remove any padding from the ListView.
@@ -36,11 +39,15 @@ class DrawerDesktopView extends StatelessWidget {
       ),
       child: Text('<Insert your name>'), 
     ),
-    for(var item in kNavigationItems)
+    for(var item in navigationItems)
       ListTile(
         title: Text(item.text),
-        onTap: () {
-        Navigator.pop(context);
+        onTap: () {scrollController.animateTo(
+                  item.position,
+                  duration: Duration(milliseconds: 700),
+                  curve: Curves.easeInOut,
+                  );
+         Navigator.pop(context);
       },
     ),
     
